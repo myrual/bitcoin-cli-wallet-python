@@ -100,7 +100,9 @@ class userInfo():
         self.user_id    = userInfojson.get("user_id")
 
 class Static_Asset():
-    def __init__(self, jsonInput):
+    def __init__(self, jsonInput = ""):
+        if jsonInput == "":
+            return
         self.type     = jsonInput.get("type")
         self.name     = jsonInput.get("name")
         self.asset_id = jsonInput.get("asset_id")
@@ -140,8 +142,10 @@ class Withdrawal():
 
 
 class Snapshot():
-    def __init__(self, jsonInput):
+    def __init__(self, jsonInput = ""):
 
+        if jsonInput == "":
+            return
         self.amount = jsonInput.get("amount")
         self.type = jsonInput.get("type")
         self.asset = Static_Asset(jsonInput.get("asset"))
@@ -338,6 +342,11 @@ class WalletRecord():
         update_pin_result_json = self.mixinAPIInstance.updatePin(input_new_pin, input_old_pin)
         user_result = Mixin_Wallet_API_Result(update_pin_result_json, User_result)
         return user_result
+
+    def account_snapshots_after(self, timestamp, asset_id, max_record_quantity):
+        snapshots_json = self.mixinAPIInstance.account_snapshots_after(timestamp, asset_id, max_record_quantity)
+        snapshots_list_result = Mixin_Wallet_API_Result(snapshots_json, Snapshot_list)
+        return snapshots_list_result
 
     def my_snapshots_after(self, timestamp, asset_id = "", limit = 500, retry = 10):
         counter = 0
